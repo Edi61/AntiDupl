@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug, Release, Publish]
 
     runs-on: windows-latest
 
@@ -46,19 +46,33 @@ jobs:
       run: |
         ${{ github.workspace }}/vcpkg/vcpkg.exe integrate install
 
-    - name: Build
+    - if: matrix.configuration == 'Release' || matrix.configuration == 'Debug'
+      name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild /m /p:Configuration=$env:Configuration $env:Solution_Name
       env: 
         Configuration: ${{ matrix.configuration }}
-  
+
+    - if: matrix.configuration == 'Publish'
+      name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m $env:Solution_Name /p:Configuration=$env:Configuration -restore -t:Publish -p:PublishProfile="AntiDuplPublishSingleFile"
+      env: 
+        Configuration: ${{ matrix.configuration }}
+        
     - name: Make release binary and source files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         cd cmd
         .\MakeBin.cmd
         .\MakeSrc.cmd
-
+        
+    - if: matrix.configuration == 'Publish'
+      name: Make release binary and source files
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        .\MakePublish.cmd
+        
     - name: VirusTotal Scan
       uses: crazy-max/ghaction-virustotal@v3
       env:
@@ -80,6 +94,17 @@ jobs:
               ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z
               ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z.hash.txt
 
+    - if: matrix.configuration == 'Publish'
+      name: Upload build SingleFilePortable
+      uses: actions/upload-artifact@v3
+      with:
+        name: AntiDupl.NET-2.3.11 build SingleFilePortable
+        path: |
+              ${{ github.workspace }}\out\publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe
+              ${{ github.workspace }}\out\publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe.hash.txt
+              ${{ github.workspace }}\out\publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z
+              ${{ github.workspace }}\out\publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z.hash.txt
+              
     - name: Upload source
       uses: actions/upload-artifact@v3
       with:
