@@ -71,6 +71,7 @@ jobs:
       name: Make release binary and source files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
+        cd cmd
         .\MakePublish.cmd
         
     - name: VirusTotal Scan
