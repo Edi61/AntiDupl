@@ -60,11 +60,19 @@ jobs:
       env: 
         Configuration: ${{ matrix.configuration }}
         
-    - name: Make release binary and source files
+    - if: matrix.configuration == 'Release'
+      name: Make release binary and source files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         cd cmd
         .\MakeBin.cmd
+        .\MakeSrc.cmd
+        
+    - if: matrix.configuration == 'Debug'
+      name: Make release binary and source files
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        cd cmd
         .\MakeSrc.cmd
         
     - if: matrix.configuration == 'Publish'
@@ -83,7 +91,17 @@ jobs:
         vt_api_key: ${{ secrets.VT_API_KEY }}
         files: |
           ${{ github.workspace }}\bin\Release\AntiDupl.NET.WinForms.exe
-
+          
+    - name: VirusTotal Scan
+      uses: crazy-max/ghaction-virustotal@v3
+      env:
+          VT_API_KEY: ${{ secrets.VT_API_KEY }}
+      if: matrix.configuration == 'Publish' && env.VT_API_KEY != null
+      with:
+        vt_api_key: ${{ secrets.VT_API_KEY }}
+        files: |
+          ${{ github.workspace }}\bin\Publish\AntiDupl.NET.WinForms.exe
+          
     - if: matrix.configuration == 'Release'
       name: Upload build
       uses: actions/upload-artifact@v3
