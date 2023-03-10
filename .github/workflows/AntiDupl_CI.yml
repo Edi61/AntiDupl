@@ -66,7 +66,6 @@ jobs:
       run: |
         cd cmd
         .\MakeBin.cmd
-        .\MakeSrc.cmd
         
     - if: matrix.configuration == 'Debug'
       name: Make release binary and source files
@@ -124,7 +123,8 @@ jobs:
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z.hash.txt
               
-    - name: Upload source
+    - if: matrix.configuration == 'Debug'
+      name: Upload source
       uses: actions/upload-artifact@v3
       with:
         name: AntiDupl.NET-2.3.11 sources
