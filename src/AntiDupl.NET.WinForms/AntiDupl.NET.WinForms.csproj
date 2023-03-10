@@ -36,8 +36,14 @@
     <OutputPath>..\..\bin\Publish\</OutputPath>
   </PropertyGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Exec Command="$(SolutionDir)\..\cmd\CopyData.cmd $(SolutionDir)\.. $(SolutionDir)\..\bin\$(ConfigurationName)" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Exec Command="$(SolutionDir)\..\cmd\CopyData.cmd $(SolutionDir)\.. $(SolutionDir)\..\bin\$(ConfigurationName)" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)|$(Platform)'=='Publish|x64'">
+    <Exec Command="$(SolutionDir)\..\cmd\CopyData.cmd $(SolutionDir)\.. $(SolutionDir)\..\out\$(ConfigurationName)\AntiDupl.NET" />
   </Target>
 
   <ItemGroup>

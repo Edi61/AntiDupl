@@ -3,7 +3,7 @@
 set RAR_EXE="C:\Program Files\WinRAR\WinRar.exe"
 
 set ROOT_DIR=..
-set RELEASE_DIR=%ROOT_DIR%\bin\Publish
+set RELEASE_DIR=%ROOT_DIR%\out\Publish\AntiDupl.NET
 set VERSION_FILE=%ROOT_DIR%\src\version.txt
 
 if not exist %RELEASE_DIR% (
