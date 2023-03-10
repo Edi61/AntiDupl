@@ -56,7 +56,7 @@ jobs:
     - if: matrix.configuration == 'Publish'
       name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: msbuild /m $env:Solution_Name /p:Configuration=$env:Configuration -restore -t:Publish -p:PublishProfile="AntiDuplPublishSingleFile"
+      run: msbuild /m $env:Solution_Name /p:Configuration=$env:Configuration -restore -t:Publish -p:PublishProfile="AntiDuplPublishSingleFile" -p:IncludeNativeLibrariesForSelfExtract=true
       env: 
         Configuration: ${{ matrix.configuration }}
         
