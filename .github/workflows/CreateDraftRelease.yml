@@ -1,0 +1,63 @@
+name: Create draft release
+
+on:
+  push:
+    tags:
+      - 'v*'
+    
+jobs:
+  build:
+    name: Create release and upload binaries
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
+      - name: Create draft release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: true
+          
+      - name: Load all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: AntiDupl.NET-2.3.11 build
+          
+      - name: Display structure of downloaded files
+        run: dir
+  
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: AntiDupl.NET-2.3.11_SingleFilePortable.exe
+          asset_name: AntiDupl.NET-2.3.11_SingleFilePortable.exe
+          tag: ${{ github.ref }}
+          overwrite: true
+          
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: AntiDupl.NET-2.3.11.exe
+          asset_name: AntiDupl.NET-2.3.11.exe
+          tag: ${{ github.ref }}
+          overwrite: true
+          
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: AntiDupl.NET-2.3.11_Sources.7z
+          asset_name: AntiDupl.NET-2.3.11_Sources.7z
+          tag: ${{ github.ref }}
+          overwrite: true
