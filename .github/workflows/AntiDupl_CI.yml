@@ -5,6 +5,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  create:
+    tags:
+      - v*
 
 env:
   VCPKG_DEFAULT_TRIPLET: x64-windows-static
