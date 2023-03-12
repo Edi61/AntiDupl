@@ -128,7 +128,7 @@ jobs:
       name: Create draft release
       uses: actions/create-release@v1
       env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ steps.get_version.outputs.VERSION }}
@@ -152,4 +152,4 @@ jobs:
         file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe
         asset_name: AntiDupl.NET-2.3.11.exe
         tag: ${{ github.ref }}
-          overwrite: true
+        overwrite: true
