@@ -130,7 +130,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe"
+        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.exe"
         tag: ${{ github.ref }}
         overwrite: true
@@ -141,7 +141,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt"
+        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt"
         tag: ${{ github.ref }}
         overwrite: true
@@ -152,7 +152,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z"
+        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.7z"
         tag: ${{ github.ref }}
         overwrite: true
@@ -163,7 +163,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt"
+        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt"
         tag: ${{ github.ref }}
         overwrite: true
@@ -174,7 +174,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe"
+        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe"
         tag: ${{ github.ref }}
         overwrite: true
@@ -185,7 +185,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt"
+        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt"
         tag: ${{ github.ref }}
         overwrite: true
@@ -196,7 +196,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z"
+        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z"
         tag: ${{ github.ref }}
         overwrite: true
@@ -207,7 +207,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: "${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt"
+        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
         asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt"
         tag: ${{ github.ref }}
         overwrite: true
