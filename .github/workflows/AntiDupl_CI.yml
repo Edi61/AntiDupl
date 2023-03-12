@@ -38,7 +38,8 @@ jobs:
         draft: true
 
   build:
-
+    needs: create-draft-release
+    
     strategy:
       matrix:
         configuration: [Debug, Release, Publish]
