@@ -121,8 +121,8 @@ jobs:
         
     - if: startswith( github.ref, 'refs/tags/')
       name: Get the version
-       id: get_version        
-       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
         
     - if: startswith( github.ref, 'refs/tags/')
       name: Create draft release
