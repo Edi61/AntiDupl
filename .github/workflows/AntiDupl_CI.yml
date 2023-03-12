@@ -38,6 +38,7 @@ jobs:
         draft: true
 
   build:
+    if: always()
     needs: create-draft-release
     
     strategy:
