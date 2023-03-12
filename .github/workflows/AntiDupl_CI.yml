@@ -14,32 +14,7 @@ env:
   
 jobs:
 
-  create-draft-release:
-  
-    if: startswith( github.ref, 'refs/tags/')
-    
-    runs-on: windows-latest
-    
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
-    - name: Get the version
-      id: get_version
-      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        
-    - name: Create draft release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: AntiDupl.NET
-        draft: true
-
   build:
-    if: always()
-    needs: create-draft-release
     
     strategy:
       matrix:
@@ -153,7 +128,7 @@ jobs:
         asset_name: AntiDupl.NET-2.3.11_SingleFilePortable.exe
         tag: ${{ github.ref }}
         overwrite: true
-        release_name: AntiDupl.NET
+        release_name: "AntiDupl.NET ${{ github.ref_name }}"
           
     - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
       name: Upload portable binaries to release
@@ -164,4 +139,4 @@ jobs:
         asset_name: AntiDupl.NET-2.3.11.exe
         tag: ${{ github.ref }}
         overwrite: true
-        release_name: AntiDupl.NET
+        release_name: "AntiDupl.NET ${{ github.ref_name }}"
