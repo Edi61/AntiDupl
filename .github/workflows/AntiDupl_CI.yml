@@ -124,7 +124,7 @@ jobs:
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
-          
+    
     - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
       name: Upload portable binaries to release
       uses: svenstaro/upload-release-action@v2
@@ -135,7 +135,7 @@ jobs:
         tag: ${{ github.ref }}
         overwrite: true
         release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
-        
+    
     - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
       name: Upload portable binaries to release
       uses: svenstaro/upload-release-action@v2
