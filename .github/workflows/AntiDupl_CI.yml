@@ -34,7 +34,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        release_name: AntiDupl.NET
         draft: true
 
   build:
@@ -152,6 +152,7 @@ jobs:
         asset_name: AntiDupl.NET-2.3.11_SingleFilePortable.exe
         tag: ${{ github.ref }}
         overwrite: true
+        release_name: AntiDupl.NET
           
     - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
       name: Upload portable binaries to release
@@ -162,3 +163,4 @@ jobs:
         asset_name: AntiDupl.NET-2.3.11.exe
         tag: ${{ github.ref }}
         overwrite: true
+        release_name: AntiDupl.NET
