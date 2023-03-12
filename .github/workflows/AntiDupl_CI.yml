@@ -28,7 +28,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-        
+      
+    - name: Read version.txt
+      id: version
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: ./src/version.txt
+      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
       
@@ -101,31 +107,31 @@ jobs:
       name: Upload build
       uses: actions/upload-artifact@v3
       with:
-        name: AntiDupl.NET-2.3.11 build
+        name: "AntiDupl.NET-${{ steps.version.outputs.content }} build"
         path: |
-              ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.exe
-              ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.exe.hash.txt
-              ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z
-              ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z.hash.txt
+              ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe
+              ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt
+              ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z
+              ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt
       
     - if: matrix.configuration == 'Publish'
       name: Upload build SingleFilePortable
       uses: actions/upload-artifact@v3
       with:
-        name: AntiDupl.NET-2.3.11 build SingleFilePortable
+        name: "AntiDupl.NET-${{ steps.version.outputs.content }} build SingleFilePortable"
         path: |
-              ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe
-              ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe.hash.txt
-              ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z
-              ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z.hash.txt
+              ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
+              ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt
+              ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
+              ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
           
     - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
       name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe
-        asset_name: AntiDupl.NET-2.3.11_SingleFilePortable.exe
+        file: "${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe"
+        asset_name: "AntiDupl.NET-${{ github.ref_name }}_SingleFilePortable.exe"
         tag: ${{ github.ref }}
         overwrite: true
         release_name: "AntiDupl.NET ${{ github.ref_name }}"
@@ -135,8 +141,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.exe
-        asset_name: AntiDupl.NET-2.3.11.exe
+        file: "${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe"
+        asset_name: "AntiDupl.NET-${{ github.ref_name }}.exe"
         tag: ${{ github.ref }}
         overwrite: true
         release_name: "AntiDupl.NET ${{ github.ref_name }}"
