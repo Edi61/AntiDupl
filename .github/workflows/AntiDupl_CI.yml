@@ -2,12 +2,12 @@ name: AntiDupl CI Build
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  create:
+    branches:
+      - master
     tags:
       - v*
+  pull_request:
+    branches: [ "master" ]
 
 env:
   VCPKG_DEFAULT_TRIPLET: x64-windows-static
@@ -69,21 +69,14 @@ jobs:
       run: |
         cd cmd
         .\MakeBin.cmd
-        
-    - if: matrix.configuration == 'Debug'
-      name: Make release binary and source files
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        cd cmd
-        .\MakeSrc.cmd
-
+      
     - if: matrix.configuration == 'Publish'
       name: Make release binary and source files
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         cd cmd
         .\MakePublish.cmd
-        
+      
     - name: VirusTotal Scan
       uses: crazy-max/ghaction-virustotal@v3
       env:
@@ -93,7 +86,7 @@ jobs:
         vt_api_key: ${{ secrets.VT_API_KEY }}
         files: |
           ${{ github.workspace }}\bin\Release\AntiDupl.NET.WinForms.exe
-          
+      
     - name: VirusTotal Scan
       uses: crazy-max/ghaction-virustotal@v3
       env:
@@ -103,7 +96,7 @@ jobs:
         vt_api_key: ${{ secrets.VT_API_KEY }}
         files: |
           ${{ github.workspace }}\out\Publish\AntiDupl.NET\AntiDupl.NET.WinForms.exe
-          
+      
     - if: matrix.configuration == 'Release'
       name: Upload build
       uses: actions/upload-artifact@v3
@@ -114,7 +107,7 @@ jobs:
               ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.exe.hash.txt
               ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z
               ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.7z.hash.txt
-
+      
     - if: matrix.configuration == 'Publish'
       name: Upload build SingleFilePortable
       uses: actions/upload-artifact@v3
@@ -125,12 +118,38 @@ jobs:
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe.hash.txt
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.7z.hash.txt
-              
-    - if: matrix.configuration == 'Debug'
-      name: Upload source
-      uses: actions/upload-artifact@v3
-      with:
-        name: AntiDupl.NET-2.3.11 sources
-        path: |
-            ${{ github.workspace }}\out\src\AntiDupl.NET-2.3.11_Sources.7z
-            ${{ github.workspace }}\out\src\AntiDupl.NET-2.3.11_Sources.7z.hash.txt
+        
+      - if: startswith( github.ref, 'refs/tags/')
+        name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
+      - if: startswith( github.ref, 'refs/tags/')
+        name: Create draft release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: true
+          
+      - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
+        name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}\out\bin\AntiDupl.NET-2.3.11.exe
+          asset_name: AntiDupl.NET-2.3.11_SingleFilePortable.exe
+          tag: ${{ github.ref }}
+          overwrite: true
+          
+      - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
+        name: Upload portable binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-2.3.11_SingleFilePortable.exe
+          asset_name: AntiDupl.NET-2.3.11.exe
+          tag: ${{ github.ref }}
+          overwrite: true
