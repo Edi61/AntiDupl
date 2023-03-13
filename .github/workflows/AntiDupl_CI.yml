@@ -126,6 +126,11 @@ jobs:
         with:
           name: "AntiDupl.NET-${{ steps.version.outputs.content }} build"
           
+      - name: Load all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: "AntiDupl.NET-${{ steps.version.outputs.content }} build SingleFilePortable"
+          
       - name: Display structure of downloaded files
         run: dir
   
@@ -133,7 +138,16 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          files: AntiDupl.NET-${{ steps.version.outputs.content }}.exe
-          name: AntiDupl.NET-${{ steps.version.outputs.content }}.exe
+          files: |
+            AntiDupl.NET-${{ steps.version.outputs.content }}.exe
+            AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt
+            AntiDupl.NET-${{ steps.version.outputs.content }}.7z
+            AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt
+            AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
+            AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt
+            AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
+            AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
+            
+          name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
