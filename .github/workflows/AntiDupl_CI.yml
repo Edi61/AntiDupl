@@ -141,6 +141,7 @@ jobs:
             AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
             
       - name: Generate VirusTotal Body
+        shell: msys2 {0}
         run: |
           echo "🛡 [VirusTotal GitHub Action](https://github.com/crazy-max/ghaction-virustotal) analysis:" >> body.txt
           echo "" >> body.txt
