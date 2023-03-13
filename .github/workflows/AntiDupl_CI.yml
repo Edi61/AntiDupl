@@ -112,6 +112,8 @@ jobs:
     runs-on: windows-latest
     
     steps:
+      - uses: msys2/setup-msys2@v2
+      
       - name: Checkout
         uses: actions/checkout@v3
         
@@ -141,7 +143,6 @@ jobs:
             AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
             
       - name: Generate VirusTotal Body
-        uses: msys2/setup-msys2@v2
         shell: msys2 {0}
         run: |
           echo "🛡 [VirusTotal GitHub Action](https://github.com/crazy-max/ghaction-virustotal) analysis:" >> body.txt
