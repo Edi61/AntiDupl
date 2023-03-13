@@ -105,90 +105,35 @@ jobs:
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
               ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
     
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
-      name: Upload portable binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.exe"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
+  create-draft-release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
     
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
-      name: Upload portable binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.exe.hash.txt"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
-
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
-      name: Upload portable binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.7z"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
         
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Release'
-      name: Upload portable binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\bin\AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}.7z.hash.txt"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
+      - name: Read version.txt
+        id: version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./src/version.txt
         
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
-      name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
-        
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
-      name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.exe.hash.txt"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
-        
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
-      name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
-        
-    - if: startswith( github.ref, 'refs/tags/') && matrix.configuration == 'Publish'
-      name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ github.workspace }}\out\Publish\AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt
-        asset_name: "AntiDupl.NET-${{ steps.version.outputs.content }}_SingleFilePortable.7z.hash.txt"
-        tag: ${{ github.ref }}
-        overwrite: true
-        release_name: "AntiDupl.NET v${{ steps.version.outputs.content }}"
+      - name: Load all artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: "AntiDupl.NET-${{ steps.version.outputs.content }} build"
+          
+      - name: Display structure of downloaded files
+        run: dir
+  
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: AntiDupl.NET-${{ steps.version.outputs.content }}.exe
+          name: AntiDupl.NET-${{ steps.version.outputs.content }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
