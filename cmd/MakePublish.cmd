@@ -45,6 +45,6 @@ certutil -hashfile %OUT_DIR%\AntiDupl.NET-%VERSION%.zip SHA256 > %OUT_DIR%\AntiD
 ) else (
 .\7-zip\7za_2201.exe a -sfx7z.sfx %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.exe %TMP_DIR%
 certutil -hashfile %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.exe SHA256 > %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.exe.hash.txt
-.\7-zip\7za_2201.exe a %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.7z .\%TMP_DIR%\*
-certutil -hashfile %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.7z SHA256 > %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.7z.hash.txt
+.\7-zip\7za_2201.exe a -tzip %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.zip .\%TMP_DIR%\*
+certutil -hashfile %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.zip SHA256 > %OUT_DIR%\AntiDupl.NET-%VERSION%_SingleFilePortable.zip.hash.txt
 )
